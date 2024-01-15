@@ -1,7 +1,8 @@
+
 ---
-title: Introduction to torrenting
-category: Guides
-order: 1
+title: Introdcution to Torrenting
+category: Arch linux
+order: 2
 ---
 
 
@@ -127,4 +128,3 @@ Other advantages include:
 - Synergy and integration with third-party applications/plugins (e.g. media servers)
 
 Seedboxes can be run on your own virtual private server (VPS) or personal computer. Alternatively, they can be hosted through various seedbox providers.
-
