@@ -1,220 +1,130 @@
 ---
-title: Arch linux with LUKS encryption 
-category: Arch linux
+title: Introduction to torrenting
+category: Guides
 order: 1
 ---
 
-## Install Arch Linux
 
-  Connect the USB drive and boot from the Arch Linux ISO.
-  
-  Make sure the system is booted in UEFI mode. The following command should display the directory contents without error.
+# Torrenting
 
-    # ls /sys/firmware/efi/efivars
- 
-  Connect to the internet. A wired connection is preferred since it's easier to connect. More info
+Torrenting is a peer-to-peer file-sharing method that facilitates the distribution and downloading of files over the internet.
 
-  Run fdisk to create Linux partitions.
+Unlike traditional file downloads, where files are obtained from a single source, torrenting leverages the collective resources of numerous participants, known as peers. This collaborative process enhances download speeds and reduces strain on individual servers, providing an efficient and resilient method for file transferring. A [torrent client](#torrent-client) allows you to connect with these peers and download the file in small fragments, which are put together to create the final result.
 
-    # fdisk /dev/<your-disk>
+## Understanding the Terminology
 
-  If you have installed Windows, you already have a GPT partition table. Otherwise, create an empty GPT partition table using the g command. (WARNING: This will erase the entire disk.)
+Term               | Definition
+-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+**Leecher**        | A user who is currently downloading the file, or has finished downloading some parts of the torrent and is sharing the pieces they have
+**Magnet link**    | A BitTorrent hyperlink that allows you to download the torrent without the need for a `.torrent` file
+**Peer**           | An individual computer or device connected to the swarm
+**Piece**          | A small segment of the file(s) that was cut up during the torrent creation process, allowing simultaneous downloading and uploading of different pieces across peers
+**Ratio**          | The ratio between the amount of data uploaded and downloaded by the user
+**Seeder**         | A user who has completed downloading the files and is sharing them with other peers by uploading the file pieces
+**Swarm**          | The collective group of peers (seeders and leechers) distributing the files
+**Torrent client** | The software or application used to download and upload files using the BitTorrent protocol
+**Torrent file**   | A file (`.torrent`) that contains metadata about the files to be shared and the tracker information required to initiate and coordinate the downloading process
+**Tracker**        | A server or web service that assists in coordinating the communication between peers in a BitTorrent network by keeping track of which peers possess which pieces of a file
 
-    # WARNING: This will erase the entire disk.
 
-    Command (m for help): g
-    Created a new GPT disklabel (GUID: ...).
 
-   Create the EFI partition (/dev/<your-disk-efi>):
+For most people, streaming services are enough and more convenient to use. However, torrenting is fairly simple and allows for better flexibility. Some reasons to torrent include:
 
-    Command (m for help): n
-    Partition number: <Press Enter>
-    First sector: <Press Enter>
-    Last sector, +/-sectors or +/-size{K,M,G,T,P}: +100M
+- Broad range of qualities and sizes
+- Significantly better quality compared to streaming sites
+- Better and faster availability
+- Better subtitles/fansubs and styling options
+- Access to a larger variety of titles and Blu-ray releases
+- Downloaded files for rewatching with no additional data usage
 
-    Command (m for help): t
-    Partition type or alias (type L to list all): uefi
+**WARNING** *Downloading torrents may be illegal depending on where you live. To avoid receiving a copyright infringement notice from your ISP, you may want to consider using a VPN or seedbox !!!.*
 
-   Create the Boot partition (/dev/<your-disk-boot>):
+## Torrent Client
 
-    Command (m for help): n
-    Partition number: <Press Enter>
-    First sector: <Press Enter>
-    Last sector, +/-sectors or +/-size{K,M,G,T,P}: +512M
+To start torrenting, you'll need a torrent client. This is the software that you will use to download torrents. Below is a list of some popular clients:
 
-    Command (m for help): t
-    Partition type or alias (type L to list all): linux
+- [qBittorrent](https://www.qbittorrent.org) recommended for pc
+- [Deluge](https://deluge-torrent.org/)
+- [LibreTorrent](https://github.com/proninyaroslav/libretorrent) recommended for android
+- [rTorrent](https://github.com/rakshasa/rtorrent) 
+- [Transmission](https://transmissionbt.com/)
 
-   Create the LUKS partition (/dev/<your-disk-luks>):
+For most users, we recommend using qBittorrent. It's a free, open-source, and feature-full client that is easy to use and understand.
 
-    Command (m for help): n
-    Partition number: <Press Enter>
-    First sector: <Press Enter>
-    Last sector, +/-sectors or +/-size{K,M,G,T,P}: <Press Enter>
+**WARNING** *You should not use newer versions of [μTorrent](https://wikipedia.org/wiki/%CE%9CTorrent) or [BitTorrent](https://wikipedia.org/wiki/BitTorrent_(software)), as they are known to be bundled with malware and adware.*
 
-    Command (m for help): t
-    Partition type or alias (type L to list all): linux
 
-  Print the partition table using the p command and check that everything is OK:
+## Getting Torrents
 
-    Command (m for help): p
+Torrents are shared using `.torrent` files or magnet links, which contain the necessary metadata of the file to be downloaded. These can be obtained through various trackers.
 
-  Write changes to the disk using the w command. (Make sure you know what you're doing before running this command).
+`.torrent` files can be added to your torrent client by opening it or browsing for the file manually. Magnet links can be opened in your browser, where it will prompt you to choose the torrent client to be opened with. Alternatively, you can paste this magnet link into your client.
 
-    Command (m for help): w
 
-  Format the EFI and Boot Partitions.
+*See the list of public trackers(will update) or private trackers(will update) for places to find anime torrents.*
 
-    mkfs.fat -F 32 /dev/<your-disk-efi>
-    mkfs.ext4 /dev/<your-disk-boot>
+## Additional Tools
 
-  Set up the encrypted partition. You can choose any other name instead of cryptlvm.
+### Port Forwarding
 
-    # cryptsetup --use-random luksFormat /dev/<your-disk-luks>
-    # cryptsetup luksOpen /dev/<your-disk-luks> cryptlvm
+Port forwarding allows computers on other networks to be able to access services behind your network. Opening ports gives your client better connectability, enabling you to download from seeders with closed ports and upload to leechers with closed ports much faster.
 
-  Create an LVM volume group. You can choose any other name instead of vg0.
+### Enabling port forwarding
 
-    # pvcreate /dev/mapper/cryptlvm
-    # vgcreate vg0 /dev/mapper/cryptlvm
+By default, most torrent clients automatically try to forward the current port via UPnP. You can test if this is working by using a port checker such as [CanYouSeeMe.org](https://canyouseeme.org) and entering the port.
 
-  Create LVM partitions (logical volumes).
+If UPnP doesn't work, you can try manually forwarding the port through your router settings.
 
- We create logical volumes for swap, root (/), and home (/home). Leave 256MiB of free space in the volume group because the e2scrub command requires the LVM volume group to have at least 256MiB of unallocated space to dedicate to the snapshot.
+**WARNING**
+*The port forwarding tutorial below is intended for those using home routers. This will not work with VPNs. Check with your provider to see if port forwarding is available.*
 
-    # lvcreate --size 8G vg0 --name swap
-    # lvcreate --size 100G vg0 --name root
-    # lvcreate -l +100%FREE vg0 --name home
-    # vreduce --size -256M vg0/home
+- Find the port used by your client. In qBittorrent, this can be found under **Tools** -> **Options** -> **Connection** -> **Listening Port**
+- Access your router's default gateway in your browser. You can find this on Windows by running Command Prompt and typing in `ipconfig`. Some common examples are:
+  - [`192.168.0.1`](http://192.168.0.1)
+  - [`172.16.0.1`](http://172.16.0.1)
+  - [`10.0.0.1`](http://10.0.0.1)
+- Locate the port forwarding option for your router. *We recommend using ports from [49152 or higher](https://wikipedia.org/wiki/Ephemeral_port) to avoid interference with other services as well as being blocked by your ISP, which is common on lower ports*
+- After saving/restarting your router and torrent client, go to [CanYouSeeMe.org](https://canyouseeme.org) to check if the port is now open
+  - If the port is closed, then you are likely using a NAT. *Unfortunately, this means you will need to use a different ISP or use a VPN that supports port forwarding*
 
- Format logical volumes.
+**DANGER** *Do not enable all ports, as they may interfere with other services or put you at risk. Avoid enabling any [well-known ports](https://wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers#Well-known_ports) and [registered ports](https://wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers#Registered_ports).*
 
-    # mkswap /dev/vg0/swap
-    # mkfs.ext4 /dev/vg0/root
-    # mkfs.ext4 /dev/vg0/home
 
- Mount new filesystems.
+### VPN
 
-    # mount /dev/vg0/root /mnt
-    # mount --mkdir /dev/<your-disk-efi> /mnt/efi
-    # mount --mkdir /dev/<your-disk-boot> /mnt/boot
-    # mount --mkdir /dev/vg0/home /mnt/home
-    # swapon /dev/vg0/swap
+A VPN is an encrypted network tunnel between your device and the internet, allowing you to mask your activity from your ISP. In the case of torrenting, this allows you to hide your torrent traffic and prevent someone from trying to spy on you.
 
- Install the base system. We also install some useful packages like git, vim, and sudo.
+Depending on which country you live in, your ISP may send you a copyright infringement notice, threaten to shut off your internet, or do absolutely nothing. On a good VPN service, this will never reach your ISP, as it is blocked by the VPN protecting your activity. *If your country is strict about it, you should highly consider buying a VPN, such as in North America or Europe.*
 
-    # pacstrap -K /mnt base linux linux-firmware openssh git vim sudo
+**WARNING** *Do not use free VPNs. These services often have limitations, weak security, and questionable privacy concerns. These may put you at greater risk compared to a premium service.*
 
- Generate /etc/fstab. This file can be used to define how disk partitions, various other block devices, or remote filesystems should be mounted into the filesystem.
+*If you use qBittorrent, you may want to consider binding it to your client*
 
-    # genfstab -U /mnt >> /mnt/etc/fstab
 
- Enter the new system.
+#### Forwarding Ports
 
-    # arch-chroot /mnt /bin/bash
+Some VPNs offer the ability to forward ports, which is especially useful if you are not able to port forward normally as it bypasses ISP restrictions:
 
- Set TimeZone.
+- [AirVPN](https://airvpn.org) - Offers 5 static ports. *Recommended to use with a third-party client such as [WireSock](https://github.com/wiresock/WireSockUI)*
 
-    ---> See available timezones:
-    # ls /usr/share/zoneinfo/
+- [ProtonVPN](https://protonvpn.com) - Offers 1 dynamic port. *Recommended to use with an [automatic port mapping client](https://github.com/ravesheep/ProtonVPN-windows) to avoid manually updating ports on reconnect*
 
-    ---> Set timezone:
-    # ln -s /usr/share/zoneinfo/Asia/Tehran /etc/localtime
+#### Split Tunneling
 
- Run hwclock(8) to generate /etc/adjtime.
+Split tunneling allows you to selectively route your internet traffic through the VPN tunnel or your internet connection simultaneously. With split tunneling, you can choose specific applications, websites, or services to be routed through the VPN while allowing other traffic to bypass the VPN and use the regular internet connection.
 
-    # hwclock --systohc
+*See the [split tunneling guide for Wireguard](https://help.rapidseedbox.com/en/articles/6810079-split-tunneling-with-wireguard-on-android) on how to set it up.*
 
- Set Locale.
+### Seedbox
 
-    # vim /etc/locale.gen (uncomment en_US.UTF-8 UTF-8)
-    # locale-gen
-    # echo LANG=en_US.UTF-8 > /etc/locale.conf
+A seedbox is a dedicated server optimized for high-speed downloading and seeding of torrents. Unlike VPNs, seedboxes are separate from your network, allowing for better peace of mind when torrenting.
 
- Set hostname.
+Other advantages include:
 
-    # echo yourhostname > /etc/hostname
+- Better uptime as it doesn't require your PC to run. *This is especially useful if you plan to build ratio on various trackers*
+- Higher prioritization when seeding due to their high speed
+- Avoiding copyright notices, as they are directed to your box instead (i.e. ignored)
+- Synergy and integration with third-party applications/plugins (e.g. media servers)
 
- Create a user.
-
-    # useradd -m -G wheel --shell /bin/bash yourusername
-    # passwd yourusername
-    # visudo
-    ---> Uncomment "%wheel ALL=(ALL) ALL"
-
- Configure mkinitcpio with modules needed to create the initramfs image.
-
-    # pacman -S lvm2
-    # vim /etc/mkinitcpio.conf
-    ---> Add 'encrypt' and 'lvm2' to HOOKS before 'filesystems'
-
- Recreate the initramfs image:
-
-    # mkinitcpio -P
-
- Setup GRUB.
-
-    # pacman -S grub efibootmgr
-    # grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
-
-In /etc/default/grub edit the line GRUB_CMDLINE_LINUX as follows. Don't forget to replace /dev/<your-disk-luks> with the appropriate path.
-
-    GRUB_CMDLINE_LINUX="cryptdevice=/dev/<your-disk-luks>:cryptlvm root=/dev/vg0/root"
-
-If you have installed Windows and want to add Windows to the GRUB menu, edit /etc/grub.d/40_custom:
-
-    #!/bin/sh
-    exec tail -n +3 $0
-    # This file provides an easy way to add custom menu entries.  Simply type the
-    # menu entries you want to add after this comment.  Be careful not to change
-    # the 'exec tail' line above.
-    if [ "${grub_platform}" == "efi" ]; then
-      menuentry "Windows 11" {
-        insmod part_gpt
-        insmod fat
-        insmod search_fs_uuid
-        insmod chain
-
-        # After --set=root, add the Windows EFI partition's UUID.
-        # (can be found with "blkid" command)
-        search --fs-uuid --set=root $FS_UUID
-        chainloader /EFI/Boot/bootx64.efi
-      }
-    fi
-
-In the above script, replace $FS_UUID with Windows EFI partition UUID. You can find this UUID using lsblk command. It should be something like 8E12-69DD.
-
-Now generate the main GRUB configuration file:
-
-    # grub-mkconfig -o /boot/grub/grub.cfg
-
-Install networkmanager package and enable NetworkManager service to ensure you have Internet connectivity after rebooting.
-
-    # pacman -S networkmanager
-    # systemctl enable NetworkManager
-
-Exit new system and unmount all filesystems.
-
-    # exit
-    # umount -R /mnt
-    # swapoff -a
-
-Arch is now installed. Reboot.
-
-    # reboot
-
-Notes
-Backup LUKS Header
-
-It is important to make a backup of LUKS header so that you can access your data in case of emergency (if your LUKS header somehow gets damaged).
-
-Create a backup file:
-
-    # cryptsetup luksHeaderBackup /dev/<your-disk-luks> --header-backup-file luks-header-backup-$(date -I)
-
-Store the backup file in a safe place, such as a USB drive. If something bad happens, you can restore the backup header:
-
-    # cryptsetup luksHeaderRestore /dev/<your-disk-luks> --header-backup-file /path/to/backup_header_file
-
-
+Seedboxes can be run on your own virtual private server (VPS) or personal computer. Alternatively, they can be hosted through various seedbox providers.
 
