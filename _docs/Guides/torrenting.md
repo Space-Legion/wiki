@@ -1,7 +1,7 @@
 
 ---
 title: Introdcution to Torrenting
-category: Guides
+category: Arch linux
 order: 2
 ---
 
