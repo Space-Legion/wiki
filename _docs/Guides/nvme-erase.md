@@ -88,3 +88,8 @@ though building is as simple as ```make && make install```
 - For more information on NVMe character devices (e.g., /dev/nvme0) vs. namespace block devices (e.g., /dev/nvme0n1), see [Why is there both character device and
   block device for nvme?](https://serverfault.com/questions/892134/why-is-there-both-character-device-and-block-device-for-nvme) and [Managing NVMe Namespaces.](https://narasimhan-v.github.io/2020/06/12/Managing-NVMe-Namespaces.html)
 
+
+
+Credits: [z399](https://github.com/z399)
+
+
