@@ -203,7 +203,7 @@ Arch is now installed. Reboot.
 
     # reboot
 
-Notes
+
 Backup LUKS Header
 
 It is important to make a backup of LUKS header so that you can access your data in case of emergency (if your LUKS header somehow gets damaged).
@@ -217,4 +217,5 @@ Store the backup file in a safe place, such as a USB drive. If something bad hap
     # cryptsetup luksHeaderRestore /dev/<your-disk-luks> --header-backup-file /path/to/backup_header_file
 
 
+Credits: [z399](https://github.com/z399)
 
