@@ -5,9 +5,9 @@ order: 3
 ---
 
 
-# Glossary
 
-## General
+
+### General
 
 | Term         | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -15,7 +15,7 @@ order: 3
 | Bitrate      | Refers to the amount of data that is processed or transmitted per unit of time. Higher bitrates generally produce higher-quality audio or video, but they also require more storage space and bandwidth for transmission. However, it's worth noting that the relationship between bitrate and quality is not always linear. Factors like the codec, compression algorithm, resolution, and content complexity also play significant roles in determining the perceived quality.                                             |
 | Transparency | Transparency is a term used to describe the perceived quality of a lossy file. A lossy file is considered transparent if a human cannot tell the difference between a lossy file and a lossless file.                                                                                                                                                                                                                                                                                                                        |
 
-## Video
+### Video
 
 | Term  | Meaning                                                                       |
 | ----- | ----------------------------------------------------------------------------- |
@@ -25,7 +25,7 @@ order: 3
 | x264  | Video encoder used to encode videos into H.264                                |
 | x265  | Video encoder used to encode videos into H.265                                |
 
-## Audio
+### Audio
 
 | Term               | Meaning                                                                     |
 | ------------------ | --------------------------------------------------------------------------- |
@@ -43,7 +43,7 @@ order: 3
 | PCM                | Uncompress lossless audio codec generally found in BluRays                  |
 | Vorbis             | Outdated lossy audio codec                                                  |
 
-## Torrent
+### Torrent
 
 | Term            | Meaning                                                                                                                                                                                            |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
