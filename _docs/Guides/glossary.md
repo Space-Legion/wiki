@@ -67,3 +67,9 @@ order: 3
 | Torrent file    | A small file that contains metadata about the files to be shared and the tracker information required to initiate and coordinate the downloading process                                           |
 | Tracker         | A server or web service that assists in coordinating the communication between peers in a BitTorrent network by keeping track of which peers possess which pieces of a file                        |
 | Racing          | Being the first in a swarm to maximize upload                                                                                                                                                      |
+
+
+Credits: [z399](https://github.com/z399)
+
+
+
