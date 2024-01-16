@@ -61,7 +61,7 @@ Torrents are shared using `.torrent` files or magnet links, which contain the ne
 `.torrent` files can be added to your torrent client by opening it or browsing for the file manually. Magnet links can be opened in your browser, where it will prompt you to choose the torrent client to be opened with. Alternatively, you can paste this magnet link into your client.
 
 
-*See the list of public trackers(will update) or private trackers(will update) for places to find anime torrents.*
+*See the list of [public trackers](https://rentry.co/megathread-all-purpose#torrents) or [private trackers](https://hdvinnie.github.io/Private-Trackers-Spreadsheet/) for places to find torrents.*
 
 ## Additional Tools
 
