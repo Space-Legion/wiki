@@ -1,6 +1,6 @@
 ---
 title: Arch linux with LUKS encryption 
-category: 
+category: Guides
 order: 1
 ---
 
